@@ -14,8 +14,8 @@ def generate_random_date(start_date, end_date):
 start_date = datetime(2024, 1, 1)
 end_date = datetime(2024, 12, 31)
 
-# Gerando um conjunto fixo de 100 nomes e associando a um telefone único
-unique_customers = {fake.phone_number(): fake.name() for _ in range(100)}
+# Gerando um conjunto fixo de 200 nomes e associando a um telefone único
+unique_customers = {fake.phone_number(): fake.name() for _ in range(200)}
 
 # Gerando o arquivo com visitas, garantindo que nomes e telefones sejam únicos e se repitam
 data = []
