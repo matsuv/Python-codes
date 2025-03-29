@@ -3,34 +3,42 @@ import faker
 import csv
 from datetime import datetime, timedelta
 
-# Gerador de dados falsos
-fake = faker.Faker()
+# Inicializa o gerador de dados falsos
+fake = faker.Faker('pt_BR')
 
-# Função para gerar uma data aleatória dentro do intervalo
-def generate_random_date(start_date, end_date):
+# Função para gerar um telefone no formato brasileiro, garantindo unicidade
+def gerar_telefone_brasileiro(existentes):
+    while True:
+        ddd = random.randint(11, 99)  # DDDs variam de 11 a 99
+        numero = random.randint(900000000, 999999999)  # Formato 9XXXX-XXXX
+        telefone = f"({ddd}) {str(numero)[:5]}-{str(numero)[5:]}"
+        if telefone not in existentes:
+            return telefone
+
+# Função para gerar uma data aleatória em 2024
+def gerar_data_aleatoria():
+    start_date = datetime(2024, 1, 1)
+    end_date = datetime(2024, 12, 31)
     return start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
 
-# Definindo intervalo de datas
-start_date = datetime(2024, 1, 1)
-end_date = datetime(2024, 12, 31)
+# Gerando um conjunto fixo de 100 clientes únicos
+clientes = {}
+while len(clientes) < 100:
+    telefone = gerar_telefone_brasileiro(clientes)
+    clientes[telefone] = fake.name()
 
-# Gerando um conjunto fixo de 200 nomes e associando a um telefone único
-unique_customers = {fake.phone_number(): fake.name() for _ in range(200)}
-
-# Gerando o arquivo com visitas, garantindo que nomes e telefones sejam únicos e se repitam
+# Gerando múltiplas visitas para cada cliente
 data = []
-for phone, name in unique_customers.items():
-    # Quantidade aleatória de visitas para cada nome/telefone entre 1 e 10
-    num_visits = random.randint(1, 10)
-    
+for phone, name in clientes.items():
+    num_visits = random.randint(1, 10)  # Cada cliente pode ter de 1 a 10 visitas
     for _ in range(num_visits):
-        visit_date = generate_random_date(start_date, end_date).strftime('%Y-%m-%d')
+        visit_date = gerar_data_aleatoria().strftime('%Y-%m-%d')
         data.append([name, phone, visit_date])
 
 # Criando o arquivo CSV
-with open('visitas_estabelecimento.csv', 'w', newline='', encoding='utf-8') as file:
+with open("visitas_estabelecimento.csv", "w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
-    writer.writerow(['Nome', 'Telefone', 'Data de Ida ao Estabelecimento'])
+    writer.writerow(["Nome", "Telefone", "Data de Ida ao Estabelecimento"])
     writer.writerows(data)
 
-print("Arquivo CSV 'visitas_estabelecimento.csv' gerado com sucesso!")
+print("Arquivo 'visitas_estabelecimento.csv' gerado com sucesso!")
