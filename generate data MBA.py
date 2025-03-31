@@ -30,7 +30,7 @@ while len(clientes) < 100:
 # Gerando múltiplas visitas para cada cliente
 data = []
 for phone, name in clientes.items():
-    num_visits = random.randint(2, 20)  # Cada cliente pode ter de 1 a 10 visitas
+    num_visits = random.randint(2, 20)  # Cada cliente pode ter de 2 a 20 visitas
     for _ in range(num_visits):
         visit_date = gerar_data_aleatoria().strftime('%Y-%m-%d')
         data.append([name, phone, visit_date])
